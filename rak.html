@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cousinverse: Rakhi Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --yellow: #FFF8DC;
+      --lavender: #E6E6FA;
+      --peach: #FFDAB9;
+      --accent: #B39DDB;
+      --text: #4B3869;
+      --card-shadow: 0 4px 16px rgba(180, 157, 219, 0.12);
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Fredoka', 'Indie Flower', cursive, sans-serif;
+      background: linear-gradient(135deg, var(--yellow) 0%, var(--peach) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+    h1, h2, h3 {
+      font-family: 'Fredoka', cursive, sans-serif;
+      margin: 0.5em 0;
+    }
+    .landing {
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: linear-gradient(120deg, var(--lavender) 60%, var(--yellow) 100%);
+      padding: 4rem 1rem 2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .landing h1 {
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      color: #7C4DFF;
+      text-shadow: 0 2px 8px #fff6;
+    }
+    .landing p {
+      font-size: 1.3rem;
+      color: #6D4C41;
+      margin-top: 1rem;
+      font-family: 'Indie Flower', cursive;
+    }
+    /* Balloon Pop */
+    .balloon-pop-egg {
+      position: fixed;
+      z-index: 2000;
+      font-size: 2.7rem;
+      cursor: pointer;
+      animation: balloon-float 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 2px 8px #b39ddb44);
+      user-select: none;
+      transition: opacity 0.4s;
+      bottom: 12vh;
+      right: 2vw;
+    }
+    .balloon-pop-egg[data-random] {
+      /* For random balloons, override position */
+      position: fixed;
+      left: auto;
+      right: auto;
+      top: auto;
+      bottom: auto;
+    }
+    @keyframes balloon-float {
+      0% { transform: translateY(0) scale(1);}
+      100% { transform: translateY(-30px) scale(1.07);}
+    }
+    .balloon-pop-egg.popping {
+      animation: balloon-pop 0.4s cubic-bezier(.7,-0.2,.7,1.5) forwards;
+    }
+    @keyframes balloon-pop {
+      0% { transform: scale(1) rotate(0deg);}
+      60% { transform: scale(1.2) rotate(-10deg);}
+      100% { transform: scale(0) rotate(30deg);}
+    }
+    .meme-modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(80,60,120,0.18);
+      z-index: 2100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInBg 0.3s;
+    }
+    @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
+    .meme-modal-card {
+      background: linear-gradient(120deg, #FFF8DC 80%, #FFDAB9 100%);
+      border-radius: 22px;
+      box-shadow: 0 8px 32px #b39ddb44;
+      padding: 2rem 1.2rem 2.2rem 1.2rem;
+      max-width: 92vw;
+      width: 340px;
+      text-align: center;
+      position: relative;
+      font-family: 'Indie Flower', cursive;
+      font-size: 1.25rem;
+      color: #7C4DFF;
+      line-height: 1.5;
+    }
+    .meme-modal-close {
+      position: absolute;
+      top: 0.5em; right: 0.7em;
+      font-size: 1.3em;
+      color: #6D4C41;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .meme-modal-close:hover { opacity: 1; }
+    /* Section Spacing */
+    .roster-section, .section {
+      max-width: 1200px;
+      margin: 0 auto 3rem auto;
+      padding: 3rem 1rem 2rem 1rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: #7C4DFF;
+      margin-bottom: 2.5rem;
+      letter-spacing: 1px;
+    }
+    /* 4-4-1 Rows for Cards, Gallery, Awards */
+    .roster-row, .gallery-row, .awards-row {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .roster-row:last-child,
+    .gallery-row:last-child,
+    .awards-row:last-child {
+      margin-bottom: 0;
+    }
+    .cousin-card, .gallery-item, .award-card {
+      background: none;
+      border: none;
+      outline: none;
+      min-width: 220px;
+      min-height: 220px;
+      flex: 1 1 220px;
+      max-width: 260px;
+      position: relative;
+      margin: 0 0.5rem;
+      box-sizing: border-box;
+    }
+    .gallery-item, .award-card {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      border-radius: 18px;
+      box-shadow: var(--card-shadow);
+      background: linear-gradient(120deg, var(--peach) 80%, var(--lavender) 100%);
+      padding: 1.5rem 1rem;
+      margin-bottom: 0;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 14px 14px 0 0;
+      background: #fff;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .gallery-caption {
+      padding: 0.7em 1em 0 1em;
+      font-size: 1rem;
+      color: #6D4C41;
+      font-family: 'Indie Flower', cursive;
+      background: var(--peach);
+      width: 100%;
+      text-align: center;
+      border-radius: 0 0 14px 14px;
+    }
+    .award-card {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #4B3869;
+      font-family: 'Fredoka', cursive;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+      justify-content: center;
+      padding: 1.5rem 1rem;
+    }
+    .award-emoji {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.3em;
+    }
+    /* UNO Flip Cards */
+    .cousin-card {
+      perspective: 900px;
+      min-width: 220px;
+      min-height: 220px;
+      margin-bottom: 0;
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      min-height: 220px;
+      transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+    .cousin-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      min-height: 220px;
+      backface-visibility: hidden;
+      border-radius: 18px;
+      box-shadow: var(--card-shadow);
+      background: linear-gradient(120deg, var(--peach) 80%, var(--lavender) 100%);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(120deg, var(--lavender) 80%, var(--peach) 100%);
+    }
+    .nickname {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #7C4DFF;
+      margin-bottom: 0.2em;
+    }
+    .title {
+      font-size: 1rem;
+      color: #6D4C41;
+      margin-bottom: 0.7em;
+      font-family: 'Indie Flower', cursive;
+    }
+    .roast, .sentiment {
+      font-size: 1.05rem;
+      color: #4B3869;
+      text-align: center;
+      margin: 0.5em 0;
+    }
+    .rakhi-message {
+      background: linear-gradient(120deg, #E6E6FA 80%, #FFF8DC 100%);
+      border-radius: 18px;
+      box-shadow: 0 4px 16px rgba(180, 157, 219, 0.12);
+      margin: 2rem auto 2rem auto;
+      padding: 2rem 1.5rem;
+      max-width: 600px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #6D4C41;
+      font-family: 'Indie Flower', cursive;
+      opacity: 0.95;
+    }
+    canvas.confetti-canvas {
+      position: fixed;
+      pointer-events: none;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      z-index: 3000;
+      display: none;
+    }
+    @media (max-width: 1100px) {
+      .roster-row, .gallery-row, .awards-row {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .cousin-card, .gallery-item, .award-card {
+        min-width: 180px;
+        max-width: 220px;
+      }
+    }
+    @media (max-width: 700px) {
+      .landing h1 { font-size: 2rem; }
+      .section-title { font-size: 1.3rem; }
+      .gallery-item img { height: 120px; }
+      .rakhi-message { font-size: 1rem; }
+      .roster-row, .gallery-row, .awards-row { gap: 0.5rem; }
+      .cousin-card, .gallery-item, .award-card { min-width: 140px; max-width: 180px; }
+    }
+    @media (max-width: 500px) {
+      .landing { padding: 2rem 0.5rem 1rem 0.5rem; }
+      .roster-section, .section { padding: 2rem 0.5rem 1rem 0.5rem; }
+      .cousin-card, .gallery-item, .award-card { min-width: 100px; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Confetti Canvas -->
+  <canvas class="confetti-canvas"></canvas>
+  <!-- Balloons will be dynamically added here -->
+  <!-- Landing Section -->
+  <section class="landing">
+    <h1>Cousinverse: Rakhi Edition</h1>
+    <p>A chaotic, emotional museum of cousinhood curated by Priya 💌</p>
+  </section>
+
+  <!-- Cousin Roster -->
+  <section class="roster-section" id="roster">
+    <h2 class="section-title">Cousin Roster</h2>
+    <div class="roster-row">
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Bunty</div>
+            <div class="title">Meme Lord</div>
+            <div class="roast">Speaks in memes. Fluent in sarcasm</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">You always know how to make us laugh</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Chikku</div>
+            <div class="title">Life Strategist</div>
+            <div class="roast">Cousin, Counselor, CEO of Showing Up</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">From outfit crises to existential ones, you’ve always got a solution, a suggestion, and a screenshot. You're the glue</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Dinky</div>
+            <div class="title">Heart Healer</div>
+            <div class="roast">Dr. Dinky, MBBS in Making You Feel Special</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">You’re the kind of person who makes one conversation feel like a warm hug, and we’re all so lucky to have you</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Rinky</div>
+            <div class="title">Main Character, Always</div>
+            <div class="roast">With her, you’re never forgotten. You’re part of the crew. Always</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">Never stop being your fun, fearless self!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roster-row">
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Abhi</div>
+            <div class="title">Tech genius</div>
+            <div class="roast">Will steal your playlist</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">Your brain is brilliant, but your heart? Even bigger. You’re always there, always kind, always giving, and it never goes unnoticed</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Nikky</div>
+            <div class="title">The Anchor</div>
+            <div class="roast">Not loud, not extra, just deadly accurate</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">Whether it’s your calm, your honesty, or the way you truly see people, you’ve always led by example. You’re still the blueprint</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Teju</div>
+            <div class="title">Fashion CEO</div>
+            <div class="roast">She’s so pretty it feels personal</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">You’re not just all style, you’re all heart. So warm, so affectionate, and somehow always looking like you stepped out of a magazine</div>
+          </div>
+        </div>
+      </div>
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Deeskshu</div>
+            <div class="title">Silent Slay</div>
+            <div class="roast">Most beautiful girl in the world</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">You bring so much color to our lives, you are the OG IT girl.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roster-row">
+      <div class="cousin-card">
+        <div class="card-inner">
+          <div class="card-front">
+            <div class="nickname">Minnu (Me!)</div>
+            <div class="title">Chief Chaos Coordinator</div>
+            <div class="roast">Writes sappy messages like this 😅</div>
+          </div>
+          <div class="card-back">
+            <div class="sentiment">Lucky to have you all as my cousins 💖</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Throwback Gallery -->
+  <section class="section" id="gallery">
+    <h2 class="section-title">Throwback Gallery</h2>
+    <div class="gallery-row">
+      <div class="gallery-item">
+        <img src="images/1.jpeg" alt="Throwback 1">
+        <div class="gallery-caption">Night full of fun and gossip</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/2.jpeg" alt="Throwback 2">
+        <div class="gallery-caption">ughhh!!! cute&lt;3</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/3.jpeg" alt="Throwback 3">
+        <div class="gallery-caption">were we new to selfies?</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/4.jpeg" alt="Throwback 4">
+        <div class="gallery-caption">better at selfies now!!</div>
+      </div>
+    </div>
+    <div class="gallery-row">
+      <div class="gallery-item">
+        <img src="images/5.jpeg" alt="Throwback 5">
+        <div class="gallery-caption">ohh here we go back!!</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/6.jpeg" alt="Throwback 6">
+        <div class="gallery-caption">The best new years of my life</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/7.jpeg" alt="Throwback 7">
+        <div class="gallery-caption">Take me back!!</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/8.jpeg" alt="Throwback 8">
+        <div class="gallery-caption">Here's to the campa!</div>
+      </div>
+    </div>
+    <div class="gallery-row">
+      <div class="gallery-item">
+        <img src="images/9.jpeg" alt="Throwback 9">
+        <div class="gallery-caption">iconic DP</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cousin Awards -->
+  <section class="section" id="awards">
+    <h2 class="section-title">Cousin Awards 🏆</h2>
+    <div class="awards-row">
+      <div class="award-card">
+        <span class="award-emoji">🌻</span>
+        Cousin Who’s Actually a Bestie<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(deeksha)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">🎬</span>
+        CEO of Cringe Reel liker<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Minnu)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">🔥</span>
+        Main Character Energy<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Bunty)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">❤️</span>
+        Emotionally Fluent in Everyone<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Chikku)</span>
+      </div>
+    </div>
+    <div class="awards-row">
+      <div class="award-card">
+        <span class="award-emoji">🤝</span>
+        Certified Green Flag<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Abhi)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">🧨</span>
+        Fun-Size Firecracker<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Teju)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">✨</span>
+        Outfit Always Outfits<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Rinky)</span>
+      </div>
+      <div class="award-card">
+        <span class="award-emoji">💯</span>
+        Pretty, perfect, passionate<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Dinky)</span>
+      </div>
+    </div>
+    <div class="awards-row">
+      <div class="award-card">
+        <span class="award-emoji">💌</span>
+        CEO of Casual Slay<br>
+        <span style="font-size:0.9em; color:#6D4C41;">(Nikky)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rakhi Message -->
+  <section class="rakhi-message" id="rakhi-message">
+    Rakhi’s just that soft little reminder that no matter where life takes us, we’ll always share something special. Maybe we don’t say it much, but I’m always rooting for you. – love, minnu🧿
+  </section>
+
+  <script>
+    // Confetti
+    function confettiPopAt(x, y) {
+      const confettiCanvas = document.querySelector('.confetti-canvas');
+      const ctx = confettiCanvas.getContext('2d');
+      let confettiParticles = [];
+      function resizeCanvas() {
+        confettiCanvas.width = window.innerWidth;
+        confettiCanvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      function randomPastel() {
+        const colors = ['#FFF8DC', '#E6E6FA', '#FFDAB9', '#B39DDB', '#F8BBD0', '#B2DFDB'];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      function createConfetti(x, y) {
+        for (let i = 0; i < 60; i++) {
+          confettiParticles.push({
+            x: x,
+            y: y,
+            r: Math.random() * 7 + 4,
+            color: randomPastel(),
+            vx: (Math.random() - 0.5) * 7,
+            vy: Math.random() * -7 - 2,
+            ay: 0.18 + Math.random() * 0.08,
+            angle: Math.random() * Math.PI * 2,
+            spin: (Math.random() - 0.5) * 0.2
+          });
+        }
+      }
+      function drawConfetti() {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettiParticles.forEach((p, i) => {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, p.r, p.r * 0.6, 0, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.restore();
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.ay;
+          p.angle += p.spin;
+          if (p.y > confettiCanvas.height + 30) confettiParticles.splice(i, 1);
+        });
+        if (confettiParticles.length > 0) {
+          requestAnimationFrame(drawConfetti);
+        } else {
+          confettiCanvas.style.display = 'none';
+        }
+      }
+      confettiCanvas.style.display = 'block';
+      createConfetti(x, y);
+      drawConfetti();
+    }
+
+    // Balloon meme modal
+    const memes = [
+      "Kalesh ayindha ivala?",
+      "Tiger adi",
+      "Chikku baba's predictions are right",
+      "big buttocks?",
+      "should we play imposter?",
+      "Life antha half half!",
+      "CRAZYYYYYYYY"
+    ];
+
+    // Balloon logic
+    function createBalloon(x = null, y = null) {
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon-pop-egg';
+      balloon.innerText = '🎈';
+      if (x !== null && y !== null) {
+        balloon.setAttribute('data-random', '1');
+        balloon.style.left = x + 'px';
+        balloon.style.top = y + 'px';
+        balloon.style.right = 'auto';
+        balloon.style.bottom = 'auto';
+      }
+      document.body.appendChild(balloon);
+
+      balloon.addEventListener('click', function(e) {
+        e.stopPropagation();
+        balloon.classList.add('popping');
+        setTimeout(() => {
+          balloon.remove();
+          confettiPopAt(
+            (x !== null ? x : window.innerWidth / 2),
+            (y !== null ? y : window.innerHeight / 2)
+          );
+          showMemeModal();
+        }, 350);
+      });
+      return balloon;
+    }
+
+    function showMemeModal() {
+      const meme = memes[Math.floor(Math.random() * memes.length)];
+      const bg = document.createElement('div');
+      bg.className = 'meme-modal-bg';
+      bg.innerHTML = `
+        <div class="meme-modal-card">
+          <button class="meme-modal-close" aria-label="Close">&times;</button>
+          <div>${meme}</div>
+        </div>
+      `;
+      document.body.appendChild(bg);
+      bg.querySelector('.meme-modal-close').onclick = () => bg.remove();
+      bg.onclick = e => { if(e.target===bg) bg.remove(); };
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add the first balloon at the bottom right
+      createBalloon();
+
+      // Only one random balloon at a time
+      let randomBalloon = null;
+      let lastBalloonScroll = 0;
+      window.addEventListener('scroll', function() {
+        if (Math.abs(window.scrollY - lastBalloonScroll) > 100) {
+          lastBalloonScroll = window.scrollY;
+          // Remove previous random balloon if exists
+          if (randomBalloon && document.body.contains(randomBalloon)) {
+            randomBalloon.remove();
+          }
+          // Random position within viewport (avoid edges)
+          const x = Math.floor(Math.random() * (window.innerWidth - 60)) + 30;
+          const y = Math.floor(Math.random() * (window.innerHeight - 120)) + 60;
+          randomBalloon = createBalloon(x, y);
+        }
+      });
+
+      // UNO flip card effect, only one open at a time
+      let openCard = null;
+      document.querySelectorAll('.card-inner').forEach(inner => {
+        inner.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const card = this.closest('.cousin-card');
+          if (openCard && openCard !== card) {
+            openCard.classList.remove('flipped');
+          }
+          if (card.classList.contains('flipped')) {
+            card.classList.remove('flipped');
+            openCard = null;
+          } else {
+            card.classList.add('flipped');
+            openCard = card;
+          }
+        });
+      });
+      // Close card if click outside
+      document.body.addEventListener('click', function(e) {
+        if (openCard && !openCard.contains(e.target)) {
+          openCard.classList.remove('flipped');
+          openCard = null;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
